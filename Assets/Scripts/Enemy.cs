@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
+
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -11,12 +11,12 @@ public class Enemy : MonoBehaviour
     public float ViewAngle = 45;
 
     private NavMeshAgent _navMeshAgent;
-    private bool isPLayerNoticed;
+    private bool _isPLayerNoticed;
 
     private void Start()
     {
         InitComponentLinks();
-
+        
         PickNewPatrolPoint();
     }
 
@@ -27,8 +27,48 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        var direction = player.transform.position - transform.position;
+        NoticePlayerUpdate();
+        ChaseUpdate();
+        PatrolUpdate();             
     }
+    private void NoticePlayerUpdate()
+    {
+        var direction = player.transform.position - transform.position;
+        _isPLayerNoticed = false;
+        if (Vector3.Angle(transform.forward, direction) < ViewAngle)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position + Vector3.up, direction, out hit))
+            {
+                if (hit.collider.gameObject == player.gameObject)
+                {
+                    _isPLayerNoticed = true;
+                }
+            }
+        }
+    }
+    private void PatrolUpdate()
+    {
+        if (!_isPLayerNoticed)
+        {
+            if (_navMeshAgent.remainingDistance == 0)
+            {
+                PickNewPatrolPoint();
+            }
+        }
+    }
+    private void PickNewPatrolPoint()
+    {
+        _navMeshAgent.destination = PatrolPoints[Random.Range(0, PatrolPoints.Count)].position;
+    }
+    private void ChaseUpdate()
+    {
+        if (_isPLayerNoticed)
+        {
+            _navMeshAgent.destination = player.transform.position;
+        }
+    }
+
 }
 
 
