@@ -1138,6 +1138,8 @@ MonoBehaviour:
   - {fileID: 1420345643}
   - {fileID: 411759565}
   - {fileID: 1511042684}
+  - {fileID: 1028453109}
+  - {fileID: 49313109}
   player: {fileID: 1332577346}
   ViewAngle: 90
   MinDetectDistance: 3
