@@ -25,33 +25,53 @@ public class Enemy : MonoBehaviour
     private void InitComponentLinks()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        _playerHealth = GetComponent<PlayerHealth>();   
+        _playerHealth = player.GetComponent<PlayerHealth>();   
     }
 
     private void Update()
     {
 
-        NoticePlayerUpdate();
+        
         ChaseUpdate();
         PatrolUpdate();
+        PlayerDamage();
+        
     }
-
-    private void NoticePlayerUpdate()
+    private void PlayerDamage()
     {
-        var direction = player.transform.position - transform.position;
-        _isPLayerNoticed = false;
-        if (Vector3.Angle(transform.forward, direction) < ViewAngle)
+        if (CheckPlayer())
+        {
+            _navMeshAgent.SetDestination(player.position);
+            //Если оставшееся расстояние меньше или равно, чем дистанция остановки
+            if (_navMeshAgent.remainingDistance <= MinDetectDistance)
+            {
+                //Отнять от здоровья игрока Damage в секунду
+                _playerHealth.TakeDamage(Damage);
+            }
+        }
+        else
+        {
+            PatrolUpdate();
+        }
+    }
+    bool CheckPlayer()
+    {
+        Vector3 direction = player.position - transform.position;
+        if (Vector3.Angle(transform.forward, direction) < ViewAngle || Vector3.Distance(transform.position, player.position) < MinDetectDistance)
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position + Vector3.up, direction, out hit))
             {
-                if (hit.collider.gameObject == player.gameObject)
+                if (hit.transform == player)
                 {
-                    _isPLayerNoticed = true;
+                    return true;
                 }
             }
         }
+        return false;
     }
+
+    
     private void PatrolUpdate()
     {
         if (!_isPLayerNoticed)
