@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
 
     public GameObject PlayerUI;
     public GameObject GameOverUI;
+    public GameObject HealEffect;
 
     float _currentValue;
 
@@ -31,18 +32,29 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthbar();
     }
+    public void AddHealth(float amount)
+    {
+        _currentValue += amount;
+        // if (_currentValue >= MaxValue) 
+        //{
+        //_currentValue = MaxValue;
+        //}
+        _currentValue = Mathf.Clamp(_currentValue, 0, MaxValue);
+        
+        //HealEffect.GetComponent<ParticleSystem>().Play();
+        UpdateHealthbar(); 
+    }
 
     void UpdateHealthbar()
-    {
-		//обновить Healthbar.value текущим значением здоровья (от 0 до 1)
+    {		
         Healthbar.value = Mathf.Lerp(0,1, _currentValue/100f);
     }
     void GameOver()
     {
-        //включить или отключить объекты и компоненты
+       
         PlayerUI.SetActive(false);
         GameOverUI.SetActive(true);
-        //GetComponent<Player>().enabled = 0;
-        //GetComponent<CameraController>().enabled = 0;
+        //GetComponent<Pl>().enabled = 0;
+        //GetComponent<PlayerController>().enabled = 0;
     }
 }
