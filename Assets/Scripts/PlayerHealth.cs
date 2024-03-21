@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public float MaxValue = 10f;
-    public Slider Healthbar;
+    public float MaxValue = 10f;  
 
     public GameObject PlayerUI;
     public GameObject GameOverUI;
     public GameObject HealEffect;
+    public RectTransform valueRectTransform;
 
     float _currentValue;
 
@@ -31,6 +31,7 @@ public class PlayerHealth : MonoBehaviour
             GameOver();
         }
         UpdateHealthbar();
+        
     }
     public void AddHealth(float amount)
     {
@@ -47,14 +48,14 @@ public class PlayerHealth : MonoBehaviour
 
     void UpdateHealthbar()
     {		
-        Healthbar.value = Mathf.Lerp(0,1, _currentValue/100f);
+        //Healthbar.value = Mathf.Lerp(0,1, _currentValue/100f);
+        valueRectTransform.anchorMax = new Vector2(_currentValue / MaxValue, 1);
     }
     void GameOver()
     {
        
         PlayerUI.SetActive(false);
         GameOverUI.SetActive(true);
-        //GetComponent<Pl>().enabled = 0;
-        //GetComponent<PlayerController>().enabled = 0;
+       
     }
 }

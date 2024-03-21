@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5148b04a3374efd46a842114719f713e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 3
+  delay: 1
   explosionPrefab: {fileID: 4152276057894368870, guid: b2e5ee8b6a10cda41ba09570a6f8b977,
     type: 3}

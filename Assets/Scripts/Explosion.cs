@@ -27,7 +27,7 @@ public class Explosion : MonoBehaviour
         var PlayerHealth = other.GetComponent<PlayerHealth>();
         if (PlayerHealth != null)
         {
-            
+            PlayerHealth.TakeDamage(damage);
         }
 
         var EnemyHealth = other.GetComponent<EnemyHealth>();
